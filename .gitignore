@@ -1,31 +1,6 @@
-Node modules
-node_modules/
 
-Build output
-dist/
-build/
 
-Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-Environment files
+server_client.json
 .env
-.env.local
-.env.*.local
-
-Vercel config
-.vercel
-
-OS files
-.DS_Store
-Thumbs.db
-
-IDEs
-.vscode/
-.idea/
-
-Optional logs
-*.log
+node_modules/
 
