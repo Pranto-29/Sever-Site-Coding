@@ -1,9 +1,3 @@
-.vercel
-.env*.local
-   node_modules/
-
-
-
 Node modules
 node_modules/
 
@@ -34,5 +28,4 @@ IDEs
 
 Optional logs
 *.log
-
 
