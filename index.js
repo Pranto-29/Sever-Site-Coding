@@ -132,7 +132,6 @@ app.get("/add-food", async (req, res) => {
         const data = req.body;
 
         if (!ObjectId.isValid(id)) return res.status(400).send({ success: false, message: "Invalid ID" });
-
         const result = await modelCollection.updateOne({ _id: new ObjectId(id) }, { $set: data });
         if (result.matchedCount === 0) return res.status(404).send({ success: false, message: "Food not found" });
 
