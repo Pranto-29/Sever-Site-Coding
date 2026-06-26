@@ -5,7 +5,15 @@ const app = express();
 require('dotenv').config()
 const port = 4000;
 
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: [
+    "https://harmonious-valkyrie-4bb7fd.netlify.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 
@@ -206,21 +214,31 @@ app.get("/manage-my-foods", async (req, res) => {
     //     res.status(500).send({ success: false, message: "Server error" });
     //   }
     // });
-
-    app.get("/my-food-requests", async (req, res) => {
+app.get("/my-food-requests", async (req, res) => {
   try {
     const email = req.query.email;
 
     if (!email) {
-      return res.status(400).send({ success: false, message: "Email missing" });
+      return res.status(400).send({
+        success: false,
+        message: "Email missing",
+      });
     }
 
-    const data = await FoodRequest.find({ email });
+    const data = await requestsCollection
+      .find({ requesterEmail: email })
+      .toArray();
 
-    res.send({ success: true, data });
+    res.send({
+      success: true,
+      data,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ success: false, message: "Server error" });
+    res.status(500).send({
+      success: false,
+      message: "Server error",
+    });
   }
 });
 
@@ -245,4 +263,7 @@ app.get("/manage-my-foods", async (req, res) => {
 run().catch(console.dir);
 
 app.get('/', (req, res) => res.send('Server is running'));
+
 app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+module.exports = app;
