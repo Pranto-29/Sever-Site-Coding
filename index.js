@@ -5,15 +5,7 @@ const app = express();
 require('dotenv').config()
 const port = 4000;
 
-// app.use(cors());
-
-app.use(cors({
-  origin: [
-    "https://harmonious-valkyrie-4bb7fd.netlify.app",
-    "http://localhost:5173"
-  ],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 
