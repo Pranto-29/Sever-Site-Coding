@@ -8,11 +8,8 @@ const port = 4000;
 app.use(cors());
 app.use(express.json());
 
-DB_USERNAME = "Model-db" 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD }@project-1.oweemrl.mongodb.net/?appName=Project-1`;
 
-console.log("===PASWORD===",process.env.DB_PASSWORD )
-console.log("===UserName===",process.env.DB_USERNAME)
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD }@project-1.oweemrl.mongodb.net/?appName=Project-1`;
 // const uri = `mongodb+srv://Model-db:cpzspZHxs5yNisFm@project-1.oweemrl.mongodb.net/?appName=Project-1`;
 const client = new MongoClient(uri, {
   serverApi: {
@@ -24,7 +21,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // await client.connect();
+    await client.connect();
     const db = client.db('Model-db');
 
     const modelCollection = db.collection('models');
@@ -99,6 +96,26 @@ app.post("/foods", async (req, res) => {
   }
 });
 
+app.get('/latest-models', async (req, res) => {
+  try {
+    const result = await modelCollection
+      .find()
+      .sort({ price_max: -1 })
+      .limit(6)
+      .toArray();
+
+    res.send({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      success: false,
+      message: err.message,
+    });
+  }
+});
     // Get single food by ID (for update pre-fill)
     app.get("/foods/:id", async (req, res) => {
       try {
@@ -177,18 +194,35 @@ app.get("/manage-my-foods", async (req, res) => {
 });
 
     // Get all requests for logged-in user
-    app.get("/my-food-requests", async (req, res) => {
-      try {
-        const email = req.query.email;
-        if (!email) return res.status(400).send({ success: false, message: "Email is required" });
+    // app.get("/my-food-requests", async (req, res) => {
+    //   try {
+    //     const email = req.query.email;
+    //     if (!email) return res.status(400).send({ success: false, message: "Email is required" });
 
-        const requests = await requestsCollection.find({ requesterEmail: email }).toArray();
-        res.send({ success: true, data: requests });
-      } catch (err) {
-        console.error(err);
-        res.status(500).send({ success: false, message: "Server error" });
-      }
-    });
+    //     const requests = await requestsCollection.find({ requesterEmail: email }).toArray();
+    //     res.send({ success: true, data: requests });
+    //   } catch (err) {
+    //     console.error(err);
+    //     res.status(500).send({ success: false, message: "Server error" });
+    //   }
+    // });
+
+    app.get("/my-food-requests", async (req, res) => {
+  try {
+    const email = req.query.email;
+
+    if (!email) {
+      return res.status(400).send({ success: false, message: "Email missing" });
+    }
+
+    const data = await FoodRequest.find({ email });
+
+    res.send({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, message: "Server error" });
+  }
+});
 
     // Add new food request
     app.post("/foodRequests", async (req, res) => {
