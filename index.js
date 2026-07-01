@@ -193,19 +193,6 @@ app.get("/manage-my-foods", async (req, res) => {
   }
 });
 
-    // Get all requests for logged-in user
-    // app.get("/my-food-requests", async (req, res) => {
-    //   try {
-    //     const email = req.query.email;
-    //     if (!email) return res.status(400).send({ success: false, message: "Email is required" });
-
-    //     const requests = await requestsCollection.find({ requesterEmail: email }).toArray();
-    //     res.send({ success: true, data: requests });
-    //   } catch (err) {
-    //     console.error(err);
-    //     res.status(500).send({ success: false, message: "Server error" });
-    //   }
-    // });
 app.get("/my-food-requests", async (req, res) => {
   try {
     const email = req.query.email;
