@@ -5,7 +5,13 @@ const app = express();
 require('dotenv').config()
 
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://sever-site-coding-d8puoagq8-assiment-10s-projects.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 
