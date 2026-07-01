@@ -116,6 +116,9 @@ app.get('/latest-models', async (req, res) => {
     });
   }
 });
+app.get("/test-route", (req, res) => {
+  res.send("Test Route Working");
+});
     // Get single food by ID (for update pre-fill)
     app.get("/foods/:id", async (req, res) => {
       try {
